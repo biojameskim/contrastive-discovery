@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contrastive Discovery</title>
+  <meta name="description" content="Contrastive Discovery: open-ended scientific discovery over competing explanations. Score discoveries by how evidence redistributes belief across a contrast set, so one experiment can rule out a hypothesis and identify the better-supported alternative.">
+
+  <!-- Link previews (Slack, Twitter, iMessage). og:image must be an absolute URL:
+       update it if the repository is renamed. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contrastive Discovery">
+  <meta property="og:description" content="Open-ended scientific discovery over competing explanations.">
+  <meta property="og:image" content="https://www.biojameskim.me/contrastive-discovery/assets/teaser.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Favicon: three belief bars (inline SVG, no file needed) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23fbfaf7'/%3E%3Crect x='6' y='7' width='8' height='5' rx='1.5' fill='%23c8412c'/%3E%3Crect x='6' y='14' width='20' height='5' rx='1.5' fill='%231f5fa8'/%3E%3Crect x='6' y='21' width='6' height='5' rx='1.5' fill='%23a9a49b'/%3E%3C/svg%3E">
+
+  <!-- All paths below are relative (no leading slash) so the site works at
+       both http://localhost:8000/ and https://www.biojameskim.me/<repo>/ -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======================================================================
+     HERO: title, authors, links.  Edit authors/affiliation/links here.
+     ====================================================================== -->
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Cornell University &middot; Preprint 2026</p>
+    <h1>Contrastive Discovery</h1>
+    <p class="subtitle">Open-Ended Scientific Discovery over Competing Explanations</p>
+    <p class="dek">
+      A discovery agent should not just ask <em>is this hypothesis true?</em>
+      It should ask <em>which of the competing explanations does the evidence favor?</em>
+    </p>
+
+    <p class="authors">
+      <a href="#">Ziang Liu</a><sup>*</sup>,
+      <a href="https://www.biojameskim.me/">James J. Kim</a><sup>*</sup>,
+      <a href="#">Yijia Dai</a>,
+      <a href="#">Jennifer J. Sun</a>
+    </p>
+    <p class="affil">
+      Department of Computer Science, Cornell University
+      <small><sup>*</sup>Equal contribution</small>
+    </p>
+
+    <!-- EDIT: paper / code URLs -->
+    <div class="buttons">
+      <a class="btn primary" href="#">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6V2zm8 1.5V8h4.5L14 3.5zM8 12h8v1.5H8V12zm0 3h8v1.5H8V15zm0 3h5v1.5H8V18z"/></svg>
+        Paper
+      </a>
+      <a class="btn" href="#">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        Code
+      </a>
+      <a class="btn" href="#cite">BibTeX</a>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================================
+     TEASER FIGURE (assets/teaser.png)
+     ====================================================================== -->
+<section class="teaser">
+  <div class="wrap wide">
+    <figure class="fig">
+      <div class="panel">
+        <img src="assets/teaser.png" alt="Left: a hypothesis generator builds a contrast set of three competing hypotheses from a dataset, and a team of agents (coder, analyst, reviewer, revisor) produces experimental evidence. Right, top: Contrastive Discovery updates belief over all three hypotheses, so H1 is resolved to alternative H2. Right, bottom: pointwise discovery tracks only H1, so H1 is rejected but the alternatives remain unknown." width="2539" height="1169">
+      </div>
+      <figcaption>
+        <b>Contrastive vs. pointwise discovery.</b> Each step poses a scientific question with a
+        <em>contrast set</em> of competing explanations, runs an experiment, and updates belief over all of them.
+        The same evidence that rejects H<sub>1</sub> resolves the question to H<sub>2</sub>.
+        Pointwise discovery only tracks H<sub>1</sub>: it learns the claim is unlikely, but not what is likely instead.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ======================================================================
+     TL;DR + headline numbers
+     ====================================================================== -->
+<section>
+  <div class="wrap">
+    <div class="tldr">
+      <p class="label">TL;DR</p>
+      <p>
+        Most LLM discovery agents are <strong>pointwise</strong>: they score one hypothesis at a time.
+        Rejecting a hypothesis then says what is unlikely, not which alternative is better supported,
+        so negative evidence is spent without resolving anything.
+        <strong>Contrastive Discovery</strong> makes the unit of discovery a scientific question together with the
+        mutually exclusive, collectively exhaustive explanations that could answer it, and scores how evidence
+        redistributes belief across them. One experiment can then rule out a hypothesis <em>and</em> identify the
+        better-supported alternative.
+      </p>
+    </div>
+
+    <ul class="stats">
+      <li class="stat"><div class="num red">89%</div><div class="lbl">of top-ranked pointwise-surprisal hypotheses are rejected</div></li>
+      <li class="stat"><div class="num">73%</div><div class="lbl">of them resolve to a specific alternative on the identical evidence</div></li>
+      <li class="stat"><div class="num">78%</div><div class="lbl">of resolved questions: blinded experts pick the same explanation</div></li>
+      <li class="stat"><div class="num">6</div><div class="lbl">scientific domains, same evidence-generation budget as the baselines</div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================================================================
+     01 · How it works
+     ====================================================================== -->
+<section class="section" id="method">
+  <div class="wrap">
+    <p class="kicker">01 &middot; How it works</p>
+    <h2>Resolve questions, not hypotheses</h2>
+    <p class="lead">
+      We keep the belief-shift principle of surprisal-based discovery but change what belief is held over:
+      a set of explanations for the same question, rather than a single claim and its implicit complement.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="n">1</span>
+        <h3>Pose a question, write out the alternatives</h3>
+        <p>At each step the agent poses a local scientific question and builds a contrast set of
+          <span class="math">K</span> explanations that are mutually exclusive and cover the outcomes the evidence should distinguish.</p>
+        <p class="example">
+          <em>Given a poor credit score, how does self-employment affect mortgage denial rates?</em><br>
+          Self-employed applicants face <strong>higher</strong> / <strong>no different</strong> / <strong>lower</strong> denial rates.
+        </p>
+      </div>
+      <div class="step">
+        <span class="n">2</span>
+        <h3>Elicit belief before and after the experiment</h3>
+        <p>An LLM elicitor allocates 100 units of belief across the alternatives before seeing any evidence,
+          then again after the agent designs and runs its analysis. Five samples are averaged and the
+          alternatives are shuffled to reduce positional bias.</p>
+      </div>
+      <div class="step">
+        <span class="n">3</span>
+        <h3>Score the shift, read off the outcome</h3>
+        <p>The discovery score is the entropy-scaled belief shift
+          <span class="math">&kappa;<sub>t</sub> = D<sub>KL</sub>(p<sup>post</sup> &#8214; p<sup>prior</sup>) / log<sub>2</sub> K</span>,
+          which guides Monte-Carlo tree search. A question is <strong>resolved</strong> when one explanation
+          clears a posterior threshold: <strong>confirmative</strong> if it was already leading,
+          <strong>corrective</strong> if the evidence moved support to a different explanation.
+          Alternatives that fall below a low threshold are <strong>ruled out</strong>.</p>
+      </div>
+    </div>
+
+    <p class="note">
+      Pointwise discovery is the <span class="math">K = 2</span> special case
+      <span class="math">{h, &not;h}</span>: the complement absorbs every alternative, so a rejection cannot say which one gained support.
+    </p>
+  </div>
+</section>
+
+<!-- ======================================================================
+     02 · Results
+     ====================================================================== -->
+<section class="section tint" id="results">
+  <div class="wrap">
+    <p class="kicker">02 &middot; Results</p>
+    <h2>Pointwise rejections hide contrastive resolutions</h2>
+    <p class="lead">
+      Six datasets spanning materials science, astronomy, mortgage discrimination, online discourse,
+      software engineering, and longitudinal social behavior; a shared agent scaffold and the same
+      budget of 200 evidence-generating attempts for every method.
+    </p>
+  </div>
+
+  <div class="wrap wide">
+    <figure class="fig">
+      <div class="panel">
+        <img src="assets/exp1-rejections.png" alt="Left: stacked bars of prior belief for pointwise vs. contrastive hypotheses across three elicitor models; pointwise mass concentrates in the maybe-true bin. Right: a flow diagram in which 89% of top pointwise hypotheses are rejected, and under contrastive re-adjudication 73% resolve to an alternative." width="2471" height="848">
+      </div>
+      <figcaption>
+        <b>Where pointwise surprisal spends its evidence.</b>
+        <em>Left:</em> pointwise proposals collapse onto the &ldquo;maybe true&rdquo; prior bin (59&ndash;82% across three elicitors),
+        so surprisal mostly surfaces disconfirmations; contrast-set hypotheses spread across prior beliefs.
+        <em>Right:</em> of the top-50 pointwise hypotheses, 89% are rejected. Re-adjudicating the same hypotheses
+        with a post-hoc contrast set and the <em>identical evidence</em> resolves 73% to a specific alternative,
+        and unresolved outcomes drop from 96% to 23%.
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap">
+    <h2 class="sub">More resolved questions at every budget</h2>
+  </div>
+  <div class="wrap">
+    <figure class="fig side">
+      <div class="panel">
+        <img src="assets/exp2-yield.png" alt="Line plot of mean number of resolutions versus top-K budget. Contrastive rises to about 162 at K=200; pointwise surprisal, novelty, and feasibility baselines and the confirmative-only contrastive curve all stay near 80 to 98. The shaded region between them is labeled Corrective Gap." width="1091" height="819">
+      </div>
+      <figcaption>
+        <b>Resolved questions vs. top-<span class="math">K</span> budget</b> (mean over six datasets, &plusmn;1 s.e.).
+        Pointwise baselines ranked by surprisal, novelty, or feasibility hit the same ceiling: an isolated hypothesis can only
+        be confirmed or rejected. Contrastive Discovery resolves substantially more, and almost all of the gain is
+        <em>corrective</em> resolutions (shaded), where evidence moved support to another explanation.
+        Resolving more does not sacrifice rejection: at <span class="math">K = 200</span>, 0.91 of contrastive units reach a
+        verdict versus 0.82 of pointwise units.
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap">
+    <h2 class="sub">Where the gain comes from</h2>
+  </div>
+  <div class="wrap wide">
+    <figure class="fig">
+      <div class="panel">
+        <img src="assets/exp3-ablation.png" alt="Three line plots versus top-K budget: resolution rate, normalized realized information gain, and margin gain, for five variants from pointwise through full contrastive. Full contrastive is highest on all three." width="1890" height="550">
+      </div>
+      <figcaption>
+        <b>Ablating three factors:</b> ranking (pointwise surprisal vs. <span class="math">&kappa;<sub>t</sub></span>),
+        evaluation (focal hypothesis vs. full contrast set), and when the set is built (post hoc vs. during discovery).
+        Evaluating evidence against the full contrast set is the biggest step. Contrastive ranking helps, but only when paired
+        with contrastive evaluation. Building the alternatives during discovery, so they shape the question and the analysis,
+        is best on all three metrics.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ======================================================================
+     03 · Validation
+     ====================================================================== -->
+<section class="section" id="validation">
+  <div class="wrap">
+    <p class="kicker">03 &middot; Do the resolutions hold up?</p>
+    <h2>Checked against references the model does not control</h2>
+    <p class="lead">
+      A resolution records where one model&rsquo;s belief settled, so we test it against blinded experts, the raw
+      evidence, other model families, and matched costs.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Blinded human experts agree</h3>
+        <p>38 evaluators with MS or PhD degrees judged 60 questions from the question, alternatives, and evidence alone.
+          The expert majority chose the same explanation as Contrastive Discovery on <strong>78.4%</strong> of resolved
+          questions, and on <strong>81.8%</strong> of the questions where pointwise discovery had rejected its hypothesis and stopped.</p>
+      </div>
+      <div class="card">
+        <h3>Resolutions follow the evidence</h3>
+        <p>Given only the numerical results for 14 claims with documented findings, the elicitor ranked the documented answer first
+          in all 11 cases where a confidence interval could be recovered. Reversing the sign of the evidence reversed the
+          resolution on all 14 claims; removing the evidence prevented any resolution.</p>
+      </div>
+      <div class="card">
+        <h3>Consistent across model families</h3>
+        <p>Re-eliciting beliefs on 180 contrast sets with gpt-4o, gemini-3-flash, and claude-sonnet-4-6: the three models
+          choose the same leading explanation on 55% of sets before seeing the evidence and on <strong>88.9%</strong> after,
+          increasing in every dataset.</p>
+      </div>
+      <div class="card">
+        <h3>The gain survives matched cost</h3>
+        <p>Capping both methods at the same total tokens, Contrastive Discovery resolves <strong>148.3</strong> questions
+          against 87.7; at the same dollar cost, 145.8 against 92.2. The advantage holds at every resolution threshold from
+          0.60 to 0.95 and in each of the six datasets.</p>
+      </div>
+    </div>
+
+    <p class="takeaway">
+      Agentic science should represent discovery not as a stream of accepted or rejected claims,
+      but as resolving among competing explanations.
+    </p>
+  </div>
+</section>
+
+<!-- ======================================================================
+     04 · Citation
+     ====================================================================== -->
+<section class="section" id="cite">
+  <div class="wrap">
+    <p class="kicker">04 &middot; Citation</p>
+    <h2>BibTeX</h2>
+    <!-- EDIT: update the entry once the paper has an arXiv id / venue -->
+    <div class="bibtex">
+      <button type="button" onclick="copyBib(this)">Copy</button>
+<pre id="bib">@misc{liu2026contrastive,
+  title  = {Contrastive Discovery: Open-Ended Scientific Discovery over Competing Explanations},
+  author = {Liu, Ziang and Kim, James J. and Dai, Yijia and Sun, Jennifer J.},
+  year   = {2026},
+  note   = {Preprint}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Contrastive Discovery &middot; Cornell University &middot; 2026
+</footer>
+
+<!-- The only JavaScript on the page: the "Copy" button for the BibTeX block. -->
+<script>
+  function copyBib(btn) {
+    navigator.clipboard.writeText(document.getElementById('bib').textContent).then(function () {
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+    });
+  }
+</script>
+
+</body>
+</html>

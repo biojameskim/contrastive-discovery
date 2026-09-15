@@ -1,0 +1,244 @@
+/* ============================================================
+   Contrastive Discovery — project page styles
+   One file, no build step. Edit the variables in :root to change
+   colors, fonts, and column widths; everything else follows.
+   ============================================================ */
+
+:root {
+  /* Colors */
+  --bg: #fbfaf7;          /* page background (warm off-white) */
+  --surface: #ffffff;     /* cards, figure panels */
+  --ink: #1d1b18;         /* body text */
+  --muted: #5f5a53;       /* captions, secondary text */
+  --line: #e6e1d8;        /* hairline borders */
+  --accent: #1f5fa8;      /* brand blue ("resolved") */
+  --accent-tint: #e9f1fb; /* pale blue backgrounds */
+  --red: #c8412c;         /* "rejected" red, used sparingly */
+
+  /* Type */
+  --serif: "Iowan Old Style", "Charter", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Layout */
+  --column: 880px;        /* text column */
+  --column-wide: 1080px;  /* wide figures */
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.2; margin: 0; }
+h2 { font-size: 1.9rem; margin-bottom: .6rem; }
+h3 { font-size: 1.15rem; margin-bottom: .4rem; }
+p { margin: 0 0 1rem; }
+strong { font-weight: 600; }
+
+.wrap { max-width: var(--column); margin: 0 auto; padding: 0 24px; }
+.wrap.wide { max-width: var(--column-wide); }
+
+/* Inline math written in plain HTML */
+.math { font-family: var(--serif); font-style: italic; white-space: nowrap; }
+.math sub, .math sup { font-style: normal; font-size: .75em; }
+
+/* ---------- Hero ---------- */
+.hero { text-align: center; padding: 72px 0 40px; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: .8rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 1.2rem + 4vw, 3.6rem);
+  letter-spacing: -.01em;
+  color: var(--accent);
+}
+.hero .subtitle {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 1rem + 1.4vw, 1.7rem);
+  color: var(--ink);
+  margin: 10px auto 22px;
+  max-width: 44ch;
+  line-height: 1.3;
+}
+.hero .dek {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 60ch;
+  margin: 0 auto 28px;
+}
+
+.authors { font-size: 1.05rem; margin-bottom: 4px; }
+.authors a { color: var(--ink); }
+.authors a:hover { color: var(--accent); }
+.affil { color: var(--muted); font-size: .95rem; margin-bottom: 26px; }
+.affil small { display: block; font-size: .85rem; margin-top: 2px; }
+
+.buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: .95rem;
+  background: var(--surface);
+  transition: background .15s, color .15s;
+}
+.btn:hover { background: var(--ink); color: #fff; text-decoration: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: #17497f; border-color: #17497f; }
+.btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* ---------- Teaser figure ---------- */
+.teaser { padding: 16px 0 8px; }
+
+/* ---------- TL;DR + headline numbers ---------- */
+.tldr {
+  background: var(--accent-tint);
+  border: 1px solid #cfdff2;
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin: 28px 0 24px;
+  font-size: 1.05rem;
+}
+.tldr .label {
+  font-family: var(--mono); font-size: .75rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.tldr p:last-child { margin-bottom: 0; }
+
+.stats {
+  list-style: none; padding: 0; margin: 0 0 8px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+}
+.stat .num { font-family: var(--serif); font-size: 2.3rem; line-height: 1; color: var(--accent); }
+.stat .num.red { color: var(--red); }
+.stat .lbl { font-size: .9rem; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+
+/* ---------- Sections ---------- */
+.section { padding: 56px 0 8px; }
+.section.tint { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-bottom: 48px; }
+.kicker {
+  font-family: var(--mono); font-size: .78rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+.lead { font-size: 1.1rem; max-width: 66ch; }
+
+/* Figures */
+.fig { margin: 24px 0 8px; }
+.fig .panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.fig img { margin: 0 auto; }
+.fig figcaption { color: var(--muted); font-size: .95rem; line-height: 1.5; margin: 12px 4px 0; max-width: 90ch; }
+.fig figcaption b { color: var(--ink); }
+
+/* Narrow figure with its caption alongside (stacks on small screens) */
+.fig.side { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px; align-items: center; }
+.fig.side figcaption { margin: 0; }
+
+.section h2.sub { margin-top: 44px; }
+
+/* "How it works" step cards */
+.steps {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin: 24px 0 20px;
+}
+.step {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 20px 16px;
+}
+.step .n {
+  display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center;
+  border-radius: 50%; background: var(--accent); color: #fff;
+  font-family: var(--mono); font-size: .85rem; font-weight: 600; margin-bottom: 10px;
+}
+.step p { font-size: .95rem; color: var(--muted); margin: 0; }
+.step p + p { margin-top: 8px; }
+.step .example {
+  background: var(--bg); border-radius: 8px; padding: 10px 12px;
+  font-size: .9rem; color: var(--ink);
+}
+.step .example em { color: var(--muted); }
+
+.note { font-size: .95rem; color: var(--muted); max-width: 70ch; }
+
+/* Compact evidence cards (validation section) */
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 22px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 20px 16px;
+}
+.card p { font-size: .95rem; color: var(--muted); margin: 0; }
+
+/* Takeaway quote */
+.takeaway {
+  font-family: var(--serif); font-size: 1.5rem; line-height: 1.35;
+  text-align: center; max-width: 34ch; margin: 44px auto 0; color: var(--ink);
+}
+
+/* BibTeX */
+.bibtex { position: relative; background: #1d1b18; color: #e9e5dd; border-radius: var(--radius); padding: 18px 20px; margin-top: 18px; overflow-x: auto; }
+.bibtex pre { margin: 0; font-family: var(--mono); font-size: .85rem; line-height: 1.5; }
+.bibtex button {
+  position: absolute; top: 12px; right: 12px;
+  background: transparent; color: #e9e5dd; border: 1px solid #5b5750; border-radius: 6px;
+  font: 600 .8rem var(--sans); padding: 5px 10px; cursor: pointer;
+}
+.bibtex button:hover { background: var(--accent); border-color: var(--accent); }
+
+footer { text-align: center; color: var(--muted); font-size: .9rem; padding: 48px 24px 60px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: 1fr; }
+  .fig.side { grid-template-columns: 1fr; gap: 0; }
+  .fig.side figcaption { margin: 12px 4px 0; }
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .hero { padding-top: 48px; }
+  .section { padding-top: 44px; }
+  .cards { grid-template-columns: 1fr; }
+  .fig .panel { padding: 10px; }
+  .tldr { padding: 18px; }
+  .takeaway { font-size: 1.25rem; }
+}
